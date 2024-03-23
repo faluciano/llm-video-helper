@@ -32,6 +32,7 @@ def transcribe_video(video_dir: str, output_dir: str):
             outputs = client.infer(endpoint_url=whisper_url, inputs=inputs)
             transcription = outputs["transcription"]
         # save the response to a file
+        video_file = video_file.replace(".mp4", "")
         output_path = os.path.join(output_dir, video_file + ".txt")
         # create output direcotry if it does not exist
         if not os.path.exists(output_dir):
