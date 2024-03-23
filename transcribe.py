@@ -6,8 +6,9 @@ import os
 load_dotenv()
 os.environ["OCTOAI_API_TOKEN"] = os.getenv("OCTOAI_API_TOKEN")
 
-whisper_url = "https://whisper-demo-kk0powt97tmb.octoai.run/predict"
-whisper_health_check = "https://whisper-demo-kk0powt97tmb.octoai.run/healthcheck"
+whisper_url = "https://whisper-demo-1uhnn6pq3i2i.octoai.run/predict"
+whisper_health_check = "https://whisper-demo-1uhnn6pq3i2i.octoai.run/healthcheck"
+
 
 client = Client(token=os.getenv("OCTOAI_API_TOKEN"))
 
@@ -23,7 +24,6 @@ def transcribe_video(video_dir: str, output_dir: str):
             base64_string = encoded_video.decode("utf-8")
         # create the input dictionary
         inputs = {
-            "language": "en",
             "task": "transcribe",
             "audio": base64_string,
         }
@@ -31,8 +31,9 @@ def transcribe_video(video_dir: str, output_dir: str):
         if client.health_check(whisper_health_check) == 200:
             outputs = client.infer(endpoint_url=whisper_url, inputs=inputs)
             transcription = outputs["transcription"]
+        # remove .mp3 from the file name
+        video_file = video_file.replace(".mp3", ".txt")
         # save the response to a file
-        video_file = video_file.replace(".mp4", ".txt")
         output_path = os.path.join(output_dir, video_file)
         # create output direcotry if it does not exist
         if not os.path.exists(output_dir):
